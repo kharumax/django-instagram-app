@@ -130,7 +130,7 @@ MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'account.CustomUser'
 
-#Emailをコンソールに表記すr
+#Emailをコンソールに表記する
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 LOGIN_URL = "account:login"

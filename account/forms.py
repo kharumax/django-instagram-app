@@ -36,6 +36,17 @@ class SignUpForm(UserCreationForm):
         return email
 
 
+class UpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ("first_name","last_name","description","image")
+
+    def __init__(self,*args,**kwargs):
+        super(UpdateForm, self).__init__(*args,**kwargs)
+        for field in self.fields.values():
+            field.widget.attrs["class"] = "form-control"
+
+
 
 
 
