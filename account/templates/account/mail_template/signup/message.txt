@@ -1,0 +1,5 @@
+{{user.email}}様
+
+以下のリンクより、本登録をお願いします。
+
+{{protocol}}://{{domain}}{% url 'account:signup_complete' token %}

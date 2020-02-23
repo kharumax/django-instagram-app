@@ -38,10 +38,10 @@ class CustomUser(AbstractBaseUser,PermissionsMixin):
 
     email = models.EmailField(_("email_address"), unique=True)
     name = models.CharField(_("name"),unique=True,max_length=255,null=False,blank=False)
-    first_name = models.CharField(_("first_name"), max_length=30, blank=True)
-    last_name = models.CharField(_("last_name"), max_length=150, blank=True)
+    first_name = models.CharField(_("first_name"), max_length=30, blank=True,null=True)
+    last_name = models.CharField(_("last_name"), max_length=150, blank=True,null=True)
     description = models.CharField(_("self_intro"),max_length=255,blank=True,null=True)
-    image = models.ImageField(upload_to='self_images/')
+    image = models.ImageField(upload_to='self_images/',null=True,blank=True)
     is_staff = models.BooleanField(
         _('staff status'),
         default=False,

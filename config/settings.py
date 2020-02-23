@@ -79,8 +79,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'django_instagram_app',
-        'USER':os.environ.get('DB_USER'),
-        'PASSWORD':os.environ.get('DB_PASSWORD'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
         'HOST':'',
         'POST':'',
     }
@@ -129,6 +129,15 @@ MEDIA_ROOT = os.path.join(BASE_DIR,"media")
 MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'account.CustomUser'
+
+#Emailをコンソールに表記すr
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+LOGIN_URL = "account:login"
+LOGIN_REDIRECT_URL = "post:top"
+LOGOUT_REDIRECT_URL = "post:top"
+
+
 
 
 
