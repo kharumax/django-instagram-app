@@ -1,0 +1,18 @@
+
+
+<div class="container" style="text-align: center">
+
+    {% if post_list %}
+    {% for post in post_list %}
+
+    <ul style="list-style: none">
+        <li><a href="{% url 'post:detail' post.pk %}">{{post.title}}</a></li>
+        <li><a href="{% url 'account:show' post.user.pk %}">{{post.user.name}}</a></li>
+    </ul>
+
+    {% endfor %}
+    {% else %}
+    投稿してください
+    {% endif %}
+
+</div>

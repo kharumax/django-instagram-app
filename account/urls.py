@@ -9,7 +9,9 @@ urlpatterns = [
     path('signup/',views.Signup.as_view(),name="signup"),
     path('signup/done/',views.SignupDone.as_view(),name="signup_done"),
     path('signup/complete/<token>/',views.SignupComplete.as_view(),name="signup_complete"),
-    path('<int:pk>/detail/',views.ShowView.as_view(),name="show"),
+    path('<int:pk>/',views.ShowView.as_view(),name="show"),
+    path('<int:pk>/feeds/',views.UserFeedView.as_view(),name="user_feeds"),
     path('<int:pk>/update/',views.InfoUpdateView.as_view(),name="update"),
+    path('list/',views.UserListView.as_view(),name="list"),
 
 ]

@@ -1,0 +1,21 @@
+
+
+<div class="container" style="text-align: center">
+
+     This page is for {{page_user.name}} .
+
+    {% if feeds %}
+    {% for post in feeds %}
+
+
+    <ul style="list-style: none">
+
+        <li>{{post.title}}</li>
+    </ul>
+
+    {% endfor %}
+    {% else %}
+    投稿してください
+    {% endif %}
+
+</div>

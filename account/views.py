@@ -9,6 +9,7 @@ from django.core.signing import BadSignature, SignatureExpired, loads, dumps
 from django.http import Http404, HttpResponseBadRequest
 from django.template.loader import render_to_string
 from django.contrib.auth.mixins import PermissionRequiredMixin, UserPassesTestMixin
+from post.models import *
 
 User = get_user_model()
 
@@ -104,6 +105,7 @@ class ShowView(generic.DetailView):
     """ユーザー詳細ページ"""
     model = User
     template_name = "account/show.html"
+    context_object_name = "user_info"
 
 
 class OnlyYouMixin(UserPassesTestMixin):
@@ -122,6 +124,25 @@ class InfoUpdateView(OnlyYouMixin,generic.UpdateView):
 
     def get_success_url(self):
         return resolve_url("account:show",pk=self.kwargs["pk"])
+
+
+class UserFeedView(generic.TemplateView):
+    template_name = "account/feed.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        user_pk = self.kwargs["pk"]
+        page_user = User.objects.get(pk=user_pk)
+        feeds = Post.objects.filter(user=page_user)
+        context["page_user"] = page_user
+        context["feeds"] = feeds
+        return context
+
+
+class UserListView(generic.ListView):
+    model = User
+    template_name = "account/list.html"
+    context_object_name = "user_list"
 
 
 

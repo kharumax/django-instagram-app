@@ -1,0 +1,37 @@
+
+
+
+<table class="table" style="text-align: center">
+    <tbody>
+        <tr>
+            <th>Title</th>
+            <td>{{post.title}}</td>
+        </tr>
+        <tr>
+            <th>User</th>
+            <td>{{post.user}}</td>
+        </tr>
+        <tr>
+            <th>Text</th>
+            <td>{{post.text}}</td>
+        </tr>
+        <tr>
+            <th>Image</th>
+            {% if post.image %}
+                <td><img src="{{post.image.url}}" alt="" height="100px" width="100px"/></td>
+            {% else %}
+                <td>No Image</td>
+            {% endif %}
+        </tr>
+        <tr>
+            <th>PostTime</th>
+            <td>{{post.created_at}}</td>
+        </tr>
+    </tbody>
+</table>
+
+    {% if user.pk == post.user.pk %}
+        <form method="post" action="{% url 'post:delete' post.pk %}">{% csrf_token %}
+            <button class="btn" type="submit" onclick='return confirm("本当に削除しますか？");'>削除</button>
+        </form>
+    {% endif %}

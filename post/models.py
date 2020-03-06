@@ -9,6 +9,7 @@ class Post(models.Model):
     text = models.CharField(max_length=255,blank=False,null=False)
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     image = models.ImageField(upload_to="post_images/")
+    hash = models.CharField(max_length=200,null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

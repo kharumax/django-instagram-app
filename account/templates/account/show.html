@@ -4,24 +4,24 @@
     <tbody>
         <tr>
             <th>ユーザーネーム</th>
-            <td>{{ user.name }}</td>
+            <td>{{ user_info.name }}</td>
         </tr>
         <tr>
             <th>姓</th>
-            <td>{{ user.last_name }}</td>
+            <td>{{ user_info.last_name }}</td>
         </tr>
         <tr>
             <th>名</th>
-            <td>{{ user.first_name }}</td>
+            <td>{{ user_info.first_name }}</td>
         </tr>
         <tr>
             <th>自己紹介</th>
-            <td>{{user.description}}</td>
+            <td>{{user_info.description}}</td>
         </tr>
-        {% if user.image %}
+        {% if user_info.image %}
         <tr>
             <th>写真</th>
-            <img src="/{{ user.image.url }}" alt="">
+            <img src="/{{ user_info.image.url }}" alt="">
         </tr>
         {% else %}
         <tr>
@@ -31,4 +31,15 @@
         {% endif %}
     </tbody>
 </table>
+
+    {% if user_info.pk == user.id %}
+        <a href="{% url 'account:update' user_info.pk %}">編集</a>
+    {% endif %}
+
+    <a href="{% url 'account:user_feeds' user_info.pk %}">
+        Feeds
+    </a>
+
+
+
 {% endblock %}
