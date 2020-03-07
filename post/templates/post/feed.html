@@ -1,18 +1,121 @@
 
+{% extends 'post/base.html' %}
 
-<div class="container" style="text-align: center">
+{% load custom_filter %}
 
-    {% if post_list %}
-    {% for post in post_list %}
+{% block contents %}
 
-    <ul style="list-style: none">
-        <li><a href="{% url 'post:detail' post.pk %}">{{post.title}}</a></li>
-        <li><a href="{% url 'account:show' post.user.pk %}">{{post.user.name}}</a></li>
-    </ul>
+<section>
+  <!-- 投稿がなかったら投稿を促す -->
+  {% if post_list %}
+  {% for post in post_list %}
+  <div class="row p-3 text-lefti">
+    <div class="col-10 offset-1">
+      <div class="card">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><a href="{% url 'account:show' post.user.pk %}" class="text-dark">
+              {% if post.user.image %}
+                <img src="{{ post.user.image.url }}" class="timeline-icon" style="height:3%">
+              {% else %}
+                No Image
+              {% endif %}
+              {{post.user.name }}
+            </a>
+          </li>
+        </ul>
+        {% if post.image %}
+          <img src="{{post.image.url}}" class="card-img" />
+        {% else %}
+            No Image
+        {% endif %}
+        <div class="card-body">
+          <div class="like_list_{{post.id}}">
+            {{ post|is_like:user }}
+            {{ like_list|get_likes:post.id }}
 
-    {% endfor %}
-    {% else %}
-    投稿してください
+            <br>
+            {{ comment_list|get_comment_list:post.id }}
+
+
+          </div>
+          <div class="card-hedder">
+
+            <div><span class="mr-2">@{{ post.user.name }}</span>{{ post.text }}</div>
+
+          </div>
+          <div class="pt-2">
+            <small>
+              投稿時間{{ post.created_at|date:'Y-m-d H:i' }}
+            </small>
+          </div>
+
+        </div>
+        <div class="card-footer">
+          コメント投稿
+          <form class="comment" id="{{post.id}}">
+            {% csrf_token %}
+            <input class="form-control col-12 comment" name="comment" type="text">
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+
+  {% else %}
+  <div class = "row p-5">
+    <div class="col-6 offset-3 text-center">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+          <p class="lead"><a href="{% url 'posts:post' %}">投稿</a>して他のユーザーに見つけてもらおう</p>
+        </div>
+      </div>
+    </div>
+  </div>
     {% endif %}
+</section>
 
-</div>
+<!-- ここでAjax処理を行う  -->
+
+<script>
+
+    $(document)
+        .on("click",".like", function () {
+            var id = $(this).attr("id"); // $(this)は.likeが付与されているタグを取得
+            do_like(id)
+        })
+        .on("submit","form",function () {
+            do_comment($(this))
+            $(this).find(":text").val(""); // もし、コメントの値が空ならFalseを返す
+            return false
+        });
+
+    function do_like(post_id) {
+        $.ajax({
+            url: `./${post_id}/like`, // ここでDjangoのurls.pyのlikeを呼び出す
+            type: 'get' // getメソッドを指定
+        })
+            .done((data) => {
+                console.log(data);
+                $('.like_list_' + post_id).html(data); // Ajax処理が完了したら、ここで返り血を挿入する
+            })
+    }
+
+    function do_comment(form) {
+        console.log(form.serialize());
+        $.ajax({
+            url: `./${form.attr("id")}/comment/`,
+            type: 'post',
+            data: form.serialize(),
+        })
+            .done((data) => {
+                $('.like_list_' + form.attr('id')).html(data);
+            })
+    }
+</script>
+
+{% endblock %}
+
+
+
