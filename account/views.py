@@ -155,14 +155,11 @@ class FollowView(LoginRequiredMixin,generic.View):
         followed = User.objects.get(id=userId)
         follow = Relationship.objects.filter(follow=following,followed=followed)
 
-        print("This is followview !")
         if follow.exists(): # 既にフォローしている場合は削除する
             follow.delete()
-            print("follow delete")
         else:
             follow = Relationship(follow=following,followed=followed)
             follow.save()
-            print("follow save")
 
         # ここで現在参照しているユーザーがフォローとフォロワーの集合をビューに返す
         followers_ids = Relationship.objects.filter(follow=followed) # フォロー集合
@@ -177,6 +174,30 @@ class FollowView(LoginRequiredMixin,generic.View):
             "followers":followers,
             "followeds":followeds
         })
+
+
+class FollowingView(generic.ListView):
+    model = User
+    template_name = "account/following.html"
+
+    def get_queryset(self):
+        user_pk = self.kwargs["pk"]
+        user = User.objects.get(pk=user_pk)
+        following_ids = Relationship.objects.filter(follow=user).values_list("followed",flat=True) # ここでフォロー元がユーザーのリレー
+        following = User.objects.filter(id__in=following_ids)
+        return following
+
+
+class FollowersView(generic.ListView):
+    model = User
+    template_name = "account/followers.html"
+
+    def get_queryset(self):
+        user_pk = self.kwargs["pk"]
+        user = User.objects.get(pk=user_pk)
+        followers_ids = Relationship.objects.filter(followed=user).values_list("follow", flat=True)  # ここでフォロー元がユーザーのリレー
+        followers = User.objects.filter(id__in=followers_ids)
+        return followers
 
 
 

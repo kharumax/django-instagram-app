@@ -1,6 +1,6 @@
 from django import template
 from django.utils.safestring import mark_safe
-from ..models import Like
+from ..models import Like,Comment,Post
 register = template.Library() # カスタムフィルタとして扱うための宣言
 
 """ここでは、カスタムフィルタを作成するAjaxを使用するために、テンプレート内で複雑な処理を行えるようにするため
@@ -8,6 +8,8 @@ register = template.Library() # カスタムフィルタとして扱うための
    ①いいねしたユーザーの情報を返す関数
    ②リクエストユーザーが「いいね」しているかどうかでいいね作成・削除の処理をわける関数
    ③特定のコメントに関するデータを返す関数
+   ④いいね数を返す関数
+   ⑤コメント数を返す関数
 """
 
 
@@ -38,6 +40,14 @@ def is_like(post,user):
         )
 
 
+@register.filter(name="like_count")
+def like_count(post):
+    like_cnt = Like.objects.filter(post=post).count() # ここでターゲットの投稿のいいね数を取得する
+    return mark_safe(
+        f"<div>{like_cnt}</div>"
+    )
+
+
 @register.filter(name="get_comment_list")
 def get_comment_list(comment_list,key):
     text = ""
@@ -45,6 +55,15 @@ def get_comment_list(comment_list,key):
         for comment in comment_list[key]:
             text += f"{comment.user.name}: {comment.text}<br>"
     return mark_safe(text)
+
+
+@register.filter(name="comment_count")
+def comment_count(post):
+    comment_cnt = Comment.objects.filter(post=post).count() # ここでターゲットの投稿のコメント数を取得する
+    return mark_safe(
+        f"<div>{comment_cnt}</div>"
+    )
+
 
 
 

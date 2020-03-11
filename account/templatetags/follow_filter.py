@@ -9,8 +9,10 @@ register = template.Library()
 """
 ここでは、カスタムフィルタを作成し、Ajaxを使用するためにテンプレート内で使用する関数を作成する
 ①ターゲットをフォロー状態に応じてボタンを変更する関数
-
+②ターゲットをフォローしているユーザー数取得関数
+③ターゲットにフォローされているユーザー数取得関数
 """
+
 
 @register.filter(name="is_follow")
 def is_follow(following,followed):
@@ -24,4 +26,22 @@ def is_follow(following,followed):
             f"<button style=\"border: 0\" class=\"follow\" id=\"{followed.id}\" "
             f"type=\"submit\"><i class=\" far fa-heart\">unfollow</i></button>"
         )
+
+
+@register.filter(name="following_count")
+def following_count(user):
+    following_cnt = Relationship.objects.filter(follow=user).count()
+    # ここでユーザーがフォローしているユーザー数を取得する
+    return mark_safe(
+        f"<div class=\"following_cnt\">{following_cnt}</div>"
+    )
+
+
+@register.filter(name="followed_count")
+def followed_count(user):
+    followed_cnt = Relationship.objects.filter(followed=user).count()
+    # ここでユーザーがフォローしているユーザー数を取得する
+    return mark_safe(
+        f"<div class=\"followed_cnt\">{followed_cnt}</div>"
+    )
 
