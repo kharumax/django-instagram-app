@@ -33,4 +33,4 @@ class Relationship(models.Model):
     follow = models.ForeignKey(User,related_name="follow",
                                on_delete=models.CASCADE)
     followed = models.ForeignKey(User,related_name="followed",on_delete=models.CASCADE)
-
+    objects = models.Manager()

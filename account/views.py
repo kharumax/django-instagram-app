@@ -8,7 +8,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.signing import BadSignature, SignatureExpired, loads, dumps
 from django.http import Http404, HttpResponseBadRequest
 from django.template.loader import render_to_string
-from django.contrib.auth.mixins import PermissionRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin, UserPassesTestMixin,LoginRequiredMixin
 from post.models import *
 
 User = get_user_model()
@@ -143,6 +143,42 @@ class UserListView(generic.ListView):
     model = User
     template_name = "account/list.html"
     context_object_name = "user_list"
+
+
+class FollowView(LoginRequiredMixin,generic.View):
+    model = Relationship
+    slug_field = "user"
+    slug_kwarg = "userId"
+
+    def get(self,request,userId):
+        following = self.request.user # フォローする側が現在のユーザー
+        followed = User.objects.get(id=userId)
+        follow = Relationship.objects.filter(follow=following,followed=followed)
+
+        print("This is followview !")
+        if follow.exists(): # 既にフォローしている場合は削除する
+            follow.delete()
+            print("follow delete")
+        else:
+            follow = Relationship(follow=following,followed=followed)
+            follow.save()
+            print("follow save")
+
+        # ここで現在参照しているユーザーがフォローとフォロワーの集合をビューに返す
+        followers_ids = Relationship.objects.filter(follow=followed) # フォロー集合
+        followers = User.objects.filter(id__in=followers_ids)
+        followed_ids = Relationship.objects.filter(followed=followed) # フォロワー集合
+        followeds = User.objects.filter(id__in=followed_ids)
+
+        return render(request,"account/follow.html",{
+            "following":following,
+            "followed" :followed,
+            "follow":follow,
+            "followers":followers,
+            "followeds":followeds
+        })
+
+
 
 
 

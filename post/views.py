@@ -36,6 +36,7 @@ class FeedView(generic.ListView):
             comment_list[post.id] = Comment.objects.filter(post=post)
         context["like_list"] = like_list
         context["comment_list"] = comment_list
+
         return context
 
 
@@ -78,7 +79,7 @@ class Likes(View):
         comment_list = {}
         # ここで既にLikeオブジェクトが存在していた場合は、削除（いいね取り消し）を行う
         #
-        if  like.exists():
+        if like.exists():
             like.delete() # いいね取り消し
         else:
             like = Like(user=user,post=post) # いいね作成を行う

@@ -1,5 +1,9 @@
 {% extends "account/base.html" %}
+
+{% load follow_filter %}
+
 {% block content %}
+
 <table class="table">
     <tbody>
         <tr>
@@ -31,6 +35,9 @@
         {% endif %}
     </tbody>
 </table>
+<div class="follow_list">
+    {{ user|is_follow:user_info }}
+</div>
 
     {% if user_info.pk == user.id %}
         <a href="{% url 'account:update' user_info.pk %}">編集</a>
@@ -40,6 +47,31 @@
         Feeds
     </a>
 
+
+
+
+
+<script>
+
+    // ここでフォローのAjax処理を行う
+    $(document)
+        .on("click",".follow",function () {
+            console.log("This is clicked!");
+            var id = $(this).attr("id"); // ここでフォロー先のユーザーIDを取得すru
+            do_follow()
+        });
+
+    function do_follow() {
+        $.ajax({
+            url: `./follow`,
+            type: 'get'
+        })
+            .done((data) => {
+                console.log(data);
+                $('.follow_list').html(data);
+            })
+    }
+</script>
 
 
 {% endblock %}

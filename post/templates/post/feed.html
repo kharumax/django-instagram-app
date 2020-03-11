@@ -86,7 +86,7 @@
             do_like(id)
         })
         .on("submit","form",function () {
-            do_comment($(this))
+            do_comment($(this));
             $(this).find(":text").val(""); // もし、コメントの値が空ならFalseを返す
             return false
         });
