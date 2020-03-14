@@ -32,9 +32,11 @@
           <div class="like_list_{{post.id}}">
             {{ post|is_like:user }}
             {{ like_list|get_likes:post.id }}
+            {{ post|like_count }}
 
             <br>
             {{ comment_list|get_comment_list:post.id }}
+            {{ post|comment_count }}
 
 
           </div>
@@ -110,6 +112,7 @@
             data: form.serialize(),
         })
             .done((data) => {
+                console.log(data);
                 $('.like_list_' + form.attr('id')).html(data);
             })
     }

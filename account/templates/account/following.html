@@ -1,0 +1,26 @@
+
+
+{% extends 'post/base.html' %}
+
+{% block contents %}
+
+<div class="row">
+    {% if following_list %}
+        {% for following in following_list %}
+            <ul class="list-unstyled">
+                {% if following.image %}
+                    <img src="/{{ following.image.url }}" alt="">
+                {% else %}
+                    No Image
+                {% endif %}
+                <a href="{% url 'account:show' following.pk %}">
+                    {{following.name}}
+                </a>
+            </ul>
+        {% endfor %}
+    {% else %}
+        <h1>フォロワーは0人です</h1>
+    {% endif %}
+</div>
+
+{% endblock %}

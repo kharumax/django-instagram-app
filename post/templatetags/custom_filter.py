@@ -31,7 +31,7 @@ def is_like(post,user):
     if Like.objects.filter(user=user,post=post).exists():
         return mark_safe(
             f"<button style=\"border: 0\" class=\"like\" id=\"{post.id}\" "
-            f"type=\"submit\"><i class=\" fas fa-heart\"></i></button>"
+            f"type=\"submit\"><i class=\" fas fa-heart\" style=\" background:red \"></i></button>"
         )
     else:
         return mark_safe(

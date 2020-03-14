@@ -35,9 +35,23 @@
         {% endif %}
     </tbody>
 </table>
-<div class="follow_list">
-    {{ user|is_follow:user_info }}
-</div>
+
+
+    <div class="follow_list">
+        {{ user|is_follow:user_info }}
+        {{ user_info | following_count }}
+        {{ user_info | followed_count }}
+    </div>
+
+    <div class="follow_info">
+        <a href="{% url 'account:followings' user_info.pk %}">
+            フォロー一覧
+        </a>
+        <a href="{% url 'account:followers' user_info.pk %}">
+            フォロワー一覧
+        </a>
+    </div>
+
 
     {% if user_info.pk == user.id %}
         <a href="{% url 'account:update' user_info.pk %}">編集</a>
@@ -46,6 +60,7 @@
     <a href="{% url 'account:user_feeds' user_info.pk %}">
         Feeds
     </a>
+
 
 
 

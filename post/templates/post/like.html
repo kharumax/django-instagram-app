@@ -3,7 +3,9 @@
 
 {{ post|is_like:user }}
 {{ like_list|get_likes:post.id }}
+{{ post|like_count }}
 
 <br>
 {{ comment_list|get_comment_list:post.id }}
+{{ post|comment_count }}
 

@@ -16,15 +16,22 @@ register = template.Library()
 
 @register.filter(name="is_follow")
 def is_follow(following,followed):
-    if Relationship.objects.filter(follow=following,followed=followed).exists():
-        return mark_safe(
-            f"<button style=\"border: 0\" class=\"follow\" id=\"{followed.id}\" "
-            f"type=\"submit\"><i class=\" fas fa-heart\">follow</i></button>"
-        )
+    from_follow = User.objects.get(pk=following.id)
+    to_follow = User.objects.get(pk=followed.id)
+    if from_follow != to_follow:
+        if Relationship.objects.filter(follow=following,followed=followed).exists():
+            return mark_safe(
+                f"<button style=\"border: 0\" class=\"follow\" id=\"{followed.id}\" "
+                f"type=\"submit\"><i class=\" fas fa-heart\">follow</i></button>"
+            )
+        else:
+            return mark_safe(
+                f"<button style=\"border: 0\" class=\"follow\" id=\"{followed.id}\" "
+                f"type=\"submit\"><i class=\" far fa-heart\">unfollow</i></button>"
+            )
     else:
         return mark_safe(
-            f"<button style=\"border: 0\" class=\"follow\" id=\"{followed.id}\" "
-            f"type=\"submit\"><i class=\" far fa-heart\">unfollow</i></button>"
+            "self"
         )
 
 
@@ -33,15 +40,15 @@ def following_count(user):
     following_cnt = Relationship.objects.filter(follow=user).count()
     # ここでユーザーがフォローしているユーザー数を取得する
     return mark_safe(
-        f"<div class=\"following_cnt\">{following_cnt}</div>"
+        f"<div class=\"following_cnt\">following : {following_cnt}</div>"
     )
 
 
 @register.filter(name="followed_count")
 def followed_count(user):
     followed_cnt = Relationship.objects.filter(followed=user).count()
-    # ここでユーザーがフォローしているユーザー数を取得する
+    # ここでユーザーをフォローしているユーザー数を取得する
     return mark_safe(
-        f"<div class=\"followed_cnt\">{followed_cnt}</div>"
+        f"<div class=\"followed_cnt\">followers : {followed_cnt}</div>"
     )
 

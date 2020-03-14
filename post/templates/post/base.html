@@ -27,13 +27,13 @@
       <a class="navbar-brand" href="/">
         Instagram
       </a>
-      <ul class="navbar-nav flex-row ml-md-auto">
+      <ul class="navbar-nav flex-row ml-md-auto mr-5">
 
         {% if user.is_authenticated and user.is_active %}
-            <li class="nav-item"><a class="nav-link" href="{% url 'post:feed' %}">Feed</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'post:post' %}">投稿</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'account:show' user.pk %}"></a>マイページ</li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'account:logout' %}">ログアウト</a></li>
+            <li class="nav-item"><a class="nav-link mr-2" href="{% url 'post:feed' %}">Feed</a></li>
+            <li class="nav-item"><a class="nav-link mr-2" href="{% url 'post:post' %}">投稿</a></li>
+            <li class="nav-item"><a class="nav-link mr-2" href="{% url 'account:show' user.pk %}">マイページ</a></li>
+            <li class="nav-item"><a class="nav-link mr-2" href="{% url 'account:logout' %}">ログアウト</a></li>
         {% else %}
             <li class="nav-item"><a class="nav-link" href="{% url 'account:signup' %}">新規登録</a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'account:login' %}">ログイン</a></li>

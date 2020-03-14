@@ -14,6 +14,6 @@ urlpatterns = [
     path('<int:pk>/update/',views.InfoUpdateView.as_view(),name="update"),
     path('list/',views.UserListView.as_view(),name="list"),
     path('<int:userId>/follow/',views.FollowView.as_view(),name="follow"),
-    path('<int:pk>/followings/',views.FollowingView.as_view(),name="following"),
+    path('<int:pk>/followings/',views.FollowingView.as_view(),name="followings"),
     path('<int:pk>/followers/',views.FollowersView.as_view(),name="followers"),
 ]

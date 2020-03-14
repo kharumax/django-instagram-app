@@ -179,6 +179,7 @@ class FollowView(LoginRequiredMixin,generic.View):
 class FollowingView(generic.ListView):
     model = User
     template_name = "account/following.html"
+    context_object_name = "following_list"
 
     def get_queryset(self):
         user_pk = self.kwargs["pk"]
@@ -191,6 +192,7 @@ class FollowingView(generic.ListView):
 class FollowersView(generic.ListView):
     model = User
     template_name = "account/followers.html"
+    context_object_name = "followers_list"
 
     def get_queryset(self):
         user_pk = self.kwargs["pk"]
