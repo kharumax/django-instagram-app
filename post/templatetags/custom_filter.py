@@ -1,7 +1,9 @@
 from django import template
 from django.utils.safestring import mark_safe
 from ..models import Like,Comment,Post
+from django.contrib.auth import get_user_model
 register = template.Library() # カスタムフィルタとして扱うための宣言
+User = get_user_model()
 
 """ここでは、カスタムフィルタを作成するAjaxを使用するために、テンプレート内で複雑な処理を行えるようにするため
    主な、処理は3つ
@@ -28,16 +30,21 @@ def get_likes(like_list,key):
 # いいねしているなら「いいね削除」、してないなら「いいね作成」
 @register.filter(name="is_like")
 def is_like(post,user):
-    if Like.objects.filter(user=user,post=post).exists():
-        return mark_safe(
-            f"<button style=\"border: 0\" class=\"like\" id=\"{post.id}\" "
-            f"type=\"submit\"><i class=\" fas fa-heart\" style=\" background:red \"></i></button>"
-        )
+    try:
+        user = User.objects.get(pk=user.id)
+    except User.DoesNotExist:
+        return mark_safe("")
     else:
-        return mark_safe(
-            f"<button style=\"border: 0\" class=\"like\" id=\"{post.id}\" "
-            f"type=\"submit\"><i class=\" far fa-heart\"></i></button>"
-        )
+        if Like.objects.filter(user=user,post=post).exists():
+            return mark_safe(
+                f"<button style=\"border: 0\" class=\"like\" id=\"{post.id}\" "
+                f"type=\"submit\"><i class=\" fas fa-heart\" style=\" color:#e54747 \"></i></button>"
+            )
+        else:
+            return mark_safe(
+                f"<button style=\"border: 0\" class=\"like\" id=\"{post.id}\" "
+                f"type=\"submit\"><i class=\" far fa-heart\"></i></button>"
+            )
 
 
 @register.filter(name="like_count")

@@ -1,11 +1,95 @@
+<html>
 
-{% for user in user_list %}
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
 
-    <ul style="text-align: center; list-style: none">
-        <li>Email : {{user.email}}</li>
-        <li>Name  : {{user.name}}</li>
-        <li>ID    : {{user.id}}</li>
-    </ul>
+  <title>Instagram</title>
+  {% load static %}
+  <!-- 必要なライブラリインポート -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+</head>
 
-{% endfor %}
+<body>
+  <header>
+    <nav class="navbar navbar-light bg-light box-shadow  scrolling-navbar">
+      <a class="navbar-brand" href="/">
+        Instagram
+      </a>
+      <div class="nav-head mr-5">
+          <ul class="navbar-nav flex-row ml-md-auto text-center">
+              <li class="nav-item mr-5">
+                  <form method= "GET" action="{% url 'post:feed' %}" class="search-wrap">
+                    <div class="input-group">
+                        <input name="keyword" type="text" class="form-control" placeholder="Search">
+                        <div class="input-group-append">
+                            <button id="id_search_button" class="btn btn-info" type="submit">
+                            <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+              </li>
+            <li class="nav-item"><a class="nav-link mr-2" href="{% url 'post:feed' %}">Feed</a></li>
 
+            {% if user.is_authenticated %}
+              {% if user.is_active %}
+
+                <li class="nav-item"><a class="nav-link mr-2" href="{% url 'post:post' %}">投稿</a></li>
+                <li class="nav-item"><a class="nav-link mr-2" href="{% url 'account:show' user.pk %}">マイページ</a></li>
+                <li class="nav-item"><a class="nav-link mr-2" href="{% url 'account:logout' %}">ログアウト</a></li>
+              {% endif %}
+            {% else %}
+                <li class="nav-item"><a class="nav-link mr-2" href="{% url 'account:signup' %}">新規登録</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'account:login' %}">ログイン</a></li>
+            {% endif %}
+          </ul>
+    </div>
+    </nav>
+
+  </header>
+  <main>
+    <div class="container mt-3">
+        <form method= "GET" action="{% url 'account:list' %}" class="search-wrap">
+            <div class="input-group">
+                <input name="username" type="text" class="form-control" placeholder="Search">
+                <div class="input-group-append">
+                    <button id="user_search_button" class="btn btn-info" type="submit">
+                    <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+        {% for user_info in user_list %}
+            <div class="card-deck">
+              <div class="card" id="{{user_info.id}}">
+                  {% if user_info.image %}
+                    <img class="card-img" src="{{ user_info.image.url }}" alt="Card image cap" height="200px" width="200px">
+                   {% else %}
+                     <img class="card-img-top" src="https://banffventureforum.com/wp-content/uploads/2019/08/No-Image.png" alt="Card image cap">
+                  {% endif %}
+                <div class="card-body">
+                  <h4 class="card-title">{{user_info.name}}</h4>
+                  <p class="card-text">{{user_info.description}}</p>
+                  <p class="card-text"><small class="text-muted">{{user_info.last_login}}</small></p>
+                </div>
+              </div>
+            </div>
+        {% endfor %}
+
+    </div>
+  </main>
+</body>
+
+</html>

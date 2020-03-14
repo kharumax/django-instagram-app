@@ -6,7 +6,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>TechpitGram</title>
+  <title>Instagram</title>
   {% load static %}
   <!-- 必要なライブラリインポート -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns"
@@ -27,22 +27,42 @@
       <a class="navbar-brand" href="/">
         Instagram
       </a>
-      <ul class="navbar-nav flex-row ml-md-auto mr-5">
-
-        {% if user.is_authenticated and user.is_active %}
+      <div class="nav-head mr-5">
+          <ul class="navbar-nav flex-row ml-md-auto text-center">
+              <li class="nav-item mr-5">
+                  <form method= "GET" action="{% url 'post:feed' %}" class="search-wrap">
+                    <div class="input-group">
+                        <input name="keyword" type="text" class="form-control" placeholder="Search">
+                        <div class="input-group-append">
+                            <button id="id_search_button" class="btn btn-info" type="submit">
+                            <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </li>
             <li class="nav-item"><a class="nav-link mr-2" href="{% url 'post:feed' %}">Feed</a></li>
-            <li class="nav-item"><a class="nav-link mr-2" href="{% url 'post:post' %}">投稿</a></li>
-            <li class="nav-item"><a class="nav-link mr-2" href="{% url 'account:show' user.pk %}">マイページ</a></li>
-            <li class="nav-item"><a class="nav-link mr-2" href="{% url 'account:logout' %}">ログアウト</a></li>
-        {% else %}
-            <li class="nav-item"><a class="nav-link" href="{% url 'account:signup' %}">新規登録</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'account:login' %}">ログイン</a></li>
-        {% endif %}
-      </ul>
+
+            {% if user.is_authenticated %}
+              {% if user.is_active %}
+
+                <li class="nav-item"><a class="nav-link mr-2" href="{% url 'post:post' %}">投稿</a></li>
+                <li class="nav-item"><a class="nav-link mr-2" href="{% url 'account:show' user.pk %}">マイページ</a></li>
+                <li class="nav-item"><a class="nav-link mr-2" href="{% url 'account:logout' %}">ログアウト</a></li>
+              {% endif %}
+            {% else %}
+                <li class="nav-item"><a class="nav-link mr-2" href="{% url 'account:signup' %}">新規登録</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'account:login' %}">ログイン</a></li>
+            {% endif %}
+          </ul>
+    </div>
     </nav>
+
   </header>
   <main>
-    {% block contents %}{% endblock %}
+    <div class="container mt-3">
+        {% block contents %}{% endblock %}
+    </div>
   </main>
 </body>
 

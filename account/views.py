@@ -142,7 +142,17 @@ class UserFeedView(generic.TemplateView):
 class UserListView(generic.ListView):
     model = User
     template_name = "account/list.html"
-    context_object_name = "user_list"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context["user_list"] = User.objects.filter(is_active=True)
+        if "username" in self.request.GET and self.request.GET["username"] is not None:
+            username = self.request.GET["username"]
+            user_list = User.objects.all().filter(
+                name__icontains=username,is_active=True
+            ).distinct().order_by("data_joined").reverse()
+            context["user_list"] = user_list
+        return context
 
 
 class FollowView(LoginRequiredMixin,generic.View):

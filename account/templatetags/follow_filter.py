@@ -16,23 +16,26 @@ register = template.Library()
 
 @register.filter(name="is_follow")
 def is_follow(following,followed):
-    from_follow = User.objects.get(pk=following.id)
-    to_follow = User.objects.get(pk=followed.id)
-    if from_follow != to_follow:
-        if Relationship.objects.filter(follow=following,followed=followed).exists():
-            return mark_safe(
-                f"<button style=\"border: 0\" class=\"follow\" id=\"{followed.id}\" "
-                f"type=\"submit\"><i class=\" fas fa-heart\">follow</i></button>"
-            )
+    try:
+        user = User.objects.get(pk=following.id)
+    except User.DoesNotExist:
+        return mark_safe("")
+    else:
+        if following != followed:
+            if Relationship.objects.filter(follow=following,followed=followed).exists():
+                return mark_safe(
+                    f"<button style=\"border: 0\" class=\"follow\" id=\"{followed.id}\" "
+                    f"type=\"submit\"><i class=\" fas fa-heart\">follow</i></button>"
+                )
+            else:
+                return mark_safe(
+                    f"<button style=\"border: 0\" class=\"follow\" id=\"{followed.id}\" "
+                    f"type=\"submit\"><i class=\" far fa-heart\">unfollow</i></button>"
+                )
         else:
             return mark_safe(
-                f"<button style=\"border: 0\" class=\"follow\" id=\"{followed.id}\" "
-                f"type=\"submit\"><i class=\" far fa-heart\">unfollow</i></button>"
+                "self"
             )
-    else:
-        return mark_safe(
-            "self"
-        )
 
 
 @register.filter(name="following_count")

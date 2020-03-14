@@ -8,6 +8,7 @@
 <section>
   <!-- 投稿がなかったら投稿を促す -->
   {% if post_list %}
+
   {% for post in post_list %}
   <div class="row p-3 text-lefti">
     <div class="col-10 offset-1">
@@ -42,7 +43,7 @@
           </div>
           <div class="card-hedder">
 
-            <div><span class="mr-2">@{{ post.user.name }}</span>{{ post.text }}</div>
+            <div><span class="mr-2">{{ post.user.name }}</span>{{ post.text }}</div>
 
           </div>
           <div class="pt-2">
@@ -54,11 +55,12 @@
         </div>
         <div class="card-footer">
           コメント投稿
+           {% if user.is_authenticated and user.is_active  %}
           <form class="comment" id="{{post.id}}">
             {% csrf_token %}
             <input class="form-control col-12 comment" name="comment" type="text">
-
           </form>
+           {% endif %}
         </div>
       </div>
     </div>
@@ -87,7 +89,7 @@
             var id = $(this).attr("id"); // $(this)は.likeが付与されているタグを取得
             do_like(id)
         })
-        .on("submit","form",function () {
+        .on("submit",".comment",function () {
             do_comment($(this));
             $(this).find(":text").val(""); // もし、コメントの値が空ならFalseを返す
             return false
