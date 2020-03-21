@@ -2,11 +2,13 @@ from django.shortcuts import render,resolve_url,redirect
 from django.urls import reverse_lazy
 from django.views import generic
 from django.views import View
-from .models import Post,Like,Comment
+from .models import Post,Like,Comment,Relationship
 from .forms import *
 from django.contrib.auth.views import get_user_model
 from django.contrib.auth.mixins import UserPassesTestMixin,LoginRequiredMixin
 from django.db.models import Q
+
+User = get_user_model()
 
 
 class Top(generic.TemplateView):
@@ -119,6 +121,13 @@ class AddComment(LoginRequiredMixin,View):
             "comment_list": comment_list,
             "post": post
         })
+
+
+
+
+
+
+
 
 
 
